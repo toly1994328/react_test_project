@@ -1,0 +1,35 @@
+
+.right-ctrl{
+  background-color: rgba(48,7,158,.5);
+  margin-right: 20px;
+  width: 250px;
+  height: 300px;
+  float: right;
+  border-radius: 10px;
+  box-shadow: #B9CAD6 2px 2px 10px 2px;
+
+  .container{
+    width: 80%;
+    margin-top: 10px;
+    background-color: rgba(247,98,43,.7);
+    padding: 5px;
+    font-weight: bold;
+    font-size: 24px;
+    border-radius: 10px;
+    box-shadow: #fff 1px 1px 5px 2px;
+
+    label{
+      color: #000;
+      font-family: KaiTi;
+      font-size: 20px;
+    }
+    input{
+      margin-left: 10px;
+      margin-right: 10px;
+      width: 50px;
+      padding: 5px;
+      font-size: 20px;
+    }
+  }
+
+}

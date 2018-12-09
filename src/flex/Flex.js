@@ -71,9 +71,19 @@ class Flex extends Component {
                     onBoxHeightChanged={this.state.ctrl[2].fun}
                     onItemWidthChanged={this.state.ctrl[3].fun}
                     onItemHeightChanged={this.state.ctrl[4].fun}/>
-                <div className="Flex" ref={"flex"}>
+
+                <div className="Flex" style={{
+                    width: this.state.ctrl[1].data + "px",
+                    height: this.state.ctrl[2].data + "px",
+                    flexDirection: flexDirection.data[flexDirection.index % flexDirection.data.length],
+                    flexWrap: flexWrap.data[flexWrap.index % flexWrap.data.length],
+                    justifyContent: justifyContent.data[justifyContent.index % justifyContent.data.length],
+                    alignItems: alignItems.data[alignItems.index % alignItems.data.length],
+                    alignContent: alignContent.data[alignContent.index % alignContent.data.length]
+                }}>
                     {this.formItem()}
                 </div>
+
                 <ListInfo data={this.state.flexObj}
                           onItemClick={this.onItemClick.bind(this)}/>
             </div>
@@ -103,8 +113,6 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        console.log(this.refs.flex.style.width);
-        this.refs.flex.style.width = this.state.ctrl[1].data + "px";
     }
 
     /**
@@ -117,7 +125,6 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        this.refs.flex.style.height = this.state.ctrl[2].data + "px";
     }
 
     /**
@@ -130,10 +137,6 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-
-        for (let i = 0; i < this.state.ctrl[0].data; i++) {
-            this.refs["title" + i].style.width = this.state.ctrl[3].data + "px";
-        }
     }
 
     /**
@@ -146,9 +149,6 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        for (let i = 0; i < this.state.ctrl[0].data; i++) {
-            this.refs["title" + i].style.height = this.state.ctrl[4].data + "px";
-        }
     }
 
     /**
@@ -156,27 +156,22 @@ class Flex extends Component {
      * @param index
      */
     onItemClick(index) {
-        let flexStyle = this.refs.flex.style;
         switch (index) {
             case 0:
                 flexDirection.index++;
-                flexStyle.flexDirection = flexDirection.data[flexDirection.index % flexDirection.data.length];
                 break;
             case 1:
                 flexWrap.index++;
-                flexStyle.flexWrap = flexWrap.data[flexWrap.index % flexWrap.data.length];
                 break;
             case 2:
                 justifyContent.index++;
-                flexStyle.justifyContent = justifyContent.data[justifyContent.index % justifyContent.data.length];
                 break;
             case 3:
                 alignItems.index++;
-                flexStyle.alignItems = alignItems.data[alignItems.index % alignItems.data.length];
+
                 break;
             case 4:
                 alignContent.index++;
-                flexStyle.alignContent = alignContent.data[alignContent.index % alignContent.data.length];
                 break;
             default:
                 break;
@@ -194,7 +189,12 @@ class Flex extends Component {
         return (
             color.map((item, index) => {
                 return (
-                    <div className={"title"} ref={"title" + index} style={{backgroundColor: item}} key={index}>
+                    <div className={"title"} style={{
+                        backgroundColor: item,
+                        width: this.state.ctrl[3].data + "px",
+                        height: this.state.ctrl[4].data + "px"
+
+                    }} key={index}>
                         Toly{index}
                     </div>
                 );
@@ -208,17 +208,15 @@ class Flex extends Component {
 
 
     notifyChanged() {
-        let flex = this.refs.flex.style;
-        let flexObj = {
-            "flex-direction": flex.flexDirection === "" ? "row" : flex.flexDirection,//元素排列方向
-            "flex-wrap": flex.flexWrap === "" ? "nowrap" : flex.flexWrap,//换行
-            // "flex-flow": $Flex.css("flex-flow"),//换行+元素排列方向
-            "justify-content": flex.justifyContent === "" ? "normal" : flex.justifyContent,//水平对齐方式
-            "align-items": flex.alignItems === "" ? "normal" : flex.alignItems,//垂直对齐方式
-            "align-content": flex.alignContent === "" ? "normal" : flex.alignContent,//多行垂直对齐方式,
-        };
         this.setState({
-            flexObj: flexObj
+            flexObj: {
+                "flex-direction": flexDirection.data[flexDirection.index],//元素排列方向
+                "flex-wrap": flexWrap.data[flexWrap.index],//换行
+                // "flex-flow": $Flex.css("flex-flow"),//换行+元素排列方向
+                "justify-content": justifyContent.data[justifyContent.index],//水平对齐方式
+                "align-items": alignItems.data[alignItems.index],//垂直对齐方式
+                "align-content": alignContent.data[alignContent.index],//多行垂直对齐方式,
+            }
         });
     }
 }

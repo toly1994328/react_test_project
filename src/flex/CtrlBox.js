@@ -15,7 +15,7 @@ class CtrlBox extends Component {
         return (
             ctrl.map((item, index) => {
                 return (
-                    <div className={"container"} key={index}>
+                    <div className={"container"} key={index} >
                         <label>{this.props.ctrl[index].info}:</label>
                         <input
                             onChange={

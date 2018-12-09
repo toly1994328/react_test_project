@@ -2,67 +2,59 @@ import React, {Component} from 'react';
 import './CtrlBox.scss'
 
 class CtrlBox extends Component {
-    constructor(props) {
-        super();
-        this.state = {
-            value: 'toly'
-        }
-    }
 
     render() {
         return (
             <div className="right-ctrl">
-
-                <div className={"container"}>
-                    <label>{this.props.ctrl[0].info}:</label>
-                    <input
-                        onChange={(v) => {
-                            this.props.onCountChanged && this.props.onCountChanged(v.target.value);
-                        }}
-                        defaultValue={this.props.ctrl[0].data}/>
-                    <label>个</label>
-                </div>
-
-                <div className={"container"}>
-                    <label>{this.props.ctrl[1].info}:</label>
-                    <input
-                        onChange={(v) => {
-                            this.props.onBoxWidthChanged && this.props.onBoxWidthChanged(v.target.value);
-                        }}
-                        defaultValue={this.props.ctrl[1].data}/>
-                    <label>px</label>
-                </div>
-
-                <div className={"container"}>
-                    <label>{this.props.ctrl[2].info}:</label>
-                    <input
-                        onChange={(v) => {
-                            this.props.onBoxHeightChanged && this.props.onBoxHeightChanged(v.target.value);
-                        }}
-                        defaultValue={this.props.ctrl[2].data}/>
-                    <label>px</label>
-                </div>
-
-                <div className={"container"}>
-                    <label>{this.props.ctrl[3].info}:</label>
-                    <input
-                        onChange={(v) => {
-                            this.props.onItemWidthChanged && this.props.onItemWidthChanged(v.target.value);
-                        }}
-                        defaultValue={this.props.ctrl[3].data}/>
-                    <label>px</label>
-                </div>
-                <div className={"container"}>
-                    <label>{this.props.ctrl[4].info}:</label>
-                    <input
-                        onChange={(v) => {
-                            this.props.onItemHeightChanged && this.props.onItemHeightChanged(v.target.value);
-                        }}
-                        defaultValue={this.props.ctrl[4].data}/>
-                    <label>px</label>
-                </div>
+                {this.createItem(this.props.ctrl)}
             </div>
         )
+    }
+
+    createItem(ctrl) {
+        return (
+            ctrl.map((item, index) => {
+                return (
+                    <div className={"container"} key={index}>
+                        <label>{this.props.ctrl[index].info}:</label>
+                        <input
+                            onChange={
+                                (v) => {
+                                    this.bindCallback(index, v);
+                                }}
+                            defaultValue={this.props.ctrl[index].data}/>
+                        <label>px</label>
+                    </div>
+                );
+            })
+        )
+    }
+
+    /**
+     * 绑定回调事件
+     * @param index
+     * @param v
+     */
+    bindCallback(index, v) {
+        switch (index) {
+            case 0:
+                this.props.onCountChanged(v.target.value);
+                break;
+            case 1:
+                this.props.onBoxWidthChanged(v.target.value);
+                break;
+            case 2:
+                this.props.onBoxHeightChanged(v.target.value);
+                break;
+            case 3:
+                this.props.onItemWidthChanged(v.target.value);
+                break;
+            case 4:
+                this.props.onItemHeightChanged(v.target.value);
+                break;
+            default:
+                break;
+        }
     }
 }
 

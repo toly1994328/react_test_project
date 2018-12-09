@@ -4,7 +4,6 @@ import ListInfo from "./ListInfo";
 import Logic from "../utils/Logic";
 import CtrlBox from "./CtrlBox";
 
-const $ = window.$;
 let justifyContent = {
     index: 0,
     data: ["normal", "flex-start", "flex-end", "center", "space-between", "space-around"]
@@ -72,10 +71,9 @@ class Flex extends Component {
                     onBoxHeightChanged={this.state.ctrl[2].fun}
                     onItemWidthChanged={this.state.ctrl[3].fun}
                     onItemHeightChanged={this.state.ctrl[4].fun}/>
-                <div className="Flex">
+                <div className="Flex" ref={"flex"}>
                     {this.formItem()}
                 </div>
-
                 <ListInfo data={this.state.flexObj}
                           onItemClick={this.onItemClick.bind(this)}/>
             </div>
@@ -105,7 +103,8 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        $(".Flex").width(this.state.ctrl[1].data);
+        console.log(this.refs.flex.style.width);
+        this.refs.flex.style.width = this.state.ctrl[1].data + "px";
     }
 
     /**
@@ -118,7 +117,7 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        $(".Flex").height(this.state.ctrl[2].data);
+        this.refs.flex.style.height = this.state.ctrl[2].data + "px";
     }
 
     /**
@@ -131,7 +130,10 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        $(".title").width(this.state.ctrl[3].data);
+
+        for (let i = 0; i < this.state.ctrl[0].data; i++) {
+            this.refs["title" + i].style.width = this.state.ctrl[3].data + "px";
+        }
     }
 
     /**
@@ -144,7 +146,9 @@ class Flex extends Component {
         this.setState({
             ctrl
         });
-        $(".title").height(this.state.ctrl[4].data);
+        for (let i = 0; i < this.state.ctrl[0].data; i++) {
+            this.refs["title" + i].style.height = this.state.ctrl[4].data + "px";
+        }
     }
 
     /**
@@ -152,38 +156,29 @@ class Flex extends Component {
      * @param index
      */
     onItemClick(index) {
-        let $Flex = $(".Flex");
+        let flexStyle = this.refs.flex.style;
         switch (index) {
             case 0:
                 flexDirection.index++;
-                $Flex.css({
-                    flexDirection: flexDirection.data[flexDirection.index % flexDirection.data.length]
-                });
+                flexStyle.flexDirection = flexDirection.data[flexDirection.index % flexDirection.data.length];
                 break;
             case 1:
                 flexWrap.index++;
-                $Flex.css({
-                    flexWrap: flexWrap.data[flexWrap.index % flexWrap.data.length]
-                });
+                flexStyle.flexWrap = flexWrap.data[flexWrap.index % flexWrap.data.length];
                 break;
-
             case 2:
                 justifyContent.index++;
-                $Flex.css({
-                    justifyContent: justifyContent.data[justifyContent.index % justifyContent.data.length]
-                });
+                flexStyle.justifyContent = justifyContent.data[justifyContent.index % justifyContent.data.length];
                 break;
             case 3:
                 alignItems.index++;
-                $Flex.css({
-                    alignItems: alignItems.data[alignItems.index % alignItems.data.length]
-                });
+                flexStyle.alignItems = alignItems.data[alignItems.index % alignItems.data.length];
                 break;
             case 4:
                 alignContent.index++;
-                $Flex.css({
-                    alignContent: alignContent.data[alignContent.index % alignContent.data.length]
-                });
+                flexStyle.alignContent = alignContent.data[alignContent.index % alignContent.data.length];
+                break;
+            default:
                 break;
         }
         this.notifyChanged();
@@ -199,10 +194,10 @@ class Flex extends Component {
         return (
             color.map((item, index) => {
                 return (
-                    <div className={"title"} style={{backgroundColor: item}} key={index}>
+                    <div className={"title"} ref={"title" + index} style={{backgroundColor: item}} key={index}>
                         Toly{index}
                     </div>
-                )
+                );
             })
         )
     }
@@ -211,17 +206,17 @@ class Flex extends Component {
         this.notifyChanged();
     }
 
-    notifyChanged() {
-        let $Flex = $(".Flex");
-        let flexObj = {
-            "flex-direction": $Flex.css("flex-direction"),//元素排列方向
-            "flex-wrap": $Flex.css("flex-wrap"),//换行
-            // "flex-flow": $Flex.css("flex-flow"),//换行+元素排列方向
-            "justify-content": $Flex.css("justify-content"),//水平对齐方式
-            "align-items": $Flex.css("align-items"),//垂直对齐方式
-            "align-content": $Flex.css("align-content"),//多行垂直对齐方式
-        };
 
+    notifyChanged() {
+        let flex = this.refs.flex.style;
+        let flexObj = {
+            "flex-direction": flex.flexDirection === "" ? "row" : flex.flexDirection,//元素排列方向
+            "flex-wrap": flex.flexWrap === "" ? "nowrap" : flex.flexWrap,//换行
+            // "flex-flow": $Flex.css("flex-flow"),//换行+元素排列方向
+            "justify-content": flex.justifyContent === "" ? "normal" : flex.justifyContent,//水平对齐方式
+            "align-items": flex.alignItems === "" ? "normal" : flex.alignItems,//垂直对齐方式
+            "align-content": flex.alignContent === "" ? "normal" : flex.alignContent,//多行垂直对齐方式,
+        };
         this.setState({
             flexObj: flexObj
         });

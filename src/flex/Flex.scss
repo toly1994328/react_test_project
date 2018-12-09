@@ -1,4 +1,4 @@
-body{
+body {
   background-image: url("../imgs/grid.svg");
 }
 
@@ -8,7 +8,8 @@ body{
   margin-left: 20px;
   width: 1000px;
   height: 300px;
-  background-color: rgba(71,71,71,.6);
+  background-color: rgba(71, 71, 71, .6);
+
   display: flex;
   .title {
     border-radius: 10px;

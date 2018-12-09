@@ -12,6 +12,15 @@ class ListInfo extends Component {
 
     formList(data) {
         let datas = [];
+        let flexObj = {
+            "flex-direction": "row",//元素排列方向
+            "flex-wrap": "nowrap",//换行
+            // "flex-flow": $Flex.css("flex-flow"),//换行+元素排列方向
+            "justify-content": "normal",//水平对齐方式
+            "align-items": "normal",//垂直对齐方式
+            "align-content": "normal",//多行垂直对齐方式
+        };
+        data = data["flex-direction"] === "" ? flexObj : data;
         for (let key in data) {
             datas.push({
                     name: key,

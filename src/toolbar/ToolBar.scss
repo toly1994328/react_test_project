@@ -1,0 +1,29 @@
+@import "../static/utils/color";
+//ToolBar 的高
+$toolbarHeight: 50px;
+
+.pager-content {
+  margin-bottom: $toolbarHeight;
+}
+
+.ToolBar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: $toolbarHeight;
+  padding-top: 4px;
+  background-color: white;
+  border-top: 1px solid rgba(204, 204, 204, 0.53);
+  .toolbar-content {
+    display: flex;
+    .toolbar-item {
+      text-align: center;
+      flex: 1;
+    }
+  }
+  .active {
+    color: blue !important;
+    transition: transform .2s;
+    transform: scale(0.9);
+  }
+}

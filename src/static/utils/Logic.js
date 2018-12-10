@@ -1,5 +1,9 @@
 class Logic {
 
+    static loadImg(name) {
+        return require("../imgs/" + name)
+    }
+
     static formatTime(time) {
         time = Math.floor(time);
         let m = Math.floor(time / 60);

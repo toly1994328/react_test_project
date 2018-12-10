@@ -1,29 +1,20 @@
 import React, {Component} from 'react';
 import './Flex.scss'
 import ListInfo from "./ListInfo";
-import Logic from "../utils/Logic";
+import Logic from "../static/utils/Logic";
 import CtrlBox from "./CtrlBox";
+import {Data} from "./Data";
 
-let justifyContent = {
-    index: 0,
-    data: ["normal", "flex-start", "flex-end", "center", "space-between", "space-around"]
-};
-let flexDirection = {
-    index: 0,
-    data: ["row", "row-reverse", "column", "column-reverse"]
-};
-let flexWrap = {
-    index: 0,
-    data: ["nowrap", "wrap", "wrap-reverse"]
-};
-let alignItems = {
-    index: 0,
-    data: ["normal", "stretch", "flex-start", "flex-end", "center", "baseline"]
-};
-let alignContent = {
-    index: 0,
-    data: ["normal", "stretch", "flex-start", "flex-end", "center", "space-between", "space-around"]
-};
+const attrData = Data.getAttrData();
+const getAttrLooped = Data.getAttrLooped;
+const getAttr = Data.getAttr;
+
+let justifyContent = attrData.justifyContent;
+let flexDirection = attrData.flexDirection;
+let flexWrap = attrData.flexWrap;
+let alignItems = attrData.alignItems;
+let alignContent = attrData.alignContent;
+
 
 class Flex extends Component {
     constructor(props) {
@@ -34,28 +25,38 @@ class Flex extends Component {
                 {
                     data: 10,
                     info: "条目数量",
-                    fun: this.onCountChanged.bind(this)
+                    fun: (input) => {
+                        this.notifyInputChanged(0, input)
+                    }
                 },
                 {
                     data: 1000,
                     info: "容器宽度",
-                    fun: this.onBoxWidthChanged.bind(this)
+                    fun: (input) => {
+                        this.notifyInputChanged(1, input)
+                    }
                 },
                 {
                     data: 300,
                     info: "容器高度",
-                    fun: this.onBoxHeightChanged.bind(this)
+                    fun: (input) => {
+                        this.notifyInputChanged(2, input)
+                    }
 
                 },
                 {
                     data: "auto",
                     info: "条目宽度",
-                    fun: this.onItemWidthChanged.bind(this)
+                    fun: (input) => {
+                        this.notifyInputChanged(3, input)
+                    }
                 },
                 {
                     data: "auto",
                     info: "条目高度",
-                    fun: this.onItemHeightChanged.bind(this)
+                    fun: (input) => {
+                        this.notifyInputChanged(4, input)
+                    }
                 }
             ]
         }
@@ -75,11 +76,11 @@ class Flex extends Component {
                 <div className="Flex" style={{
                     width: this.state.ctrl[1].data + "px",
                     height: this.state.ctrl[2].data + "px",
-                    flexDirection: flexDirection.data[flexDirection.index % flexDirection.data.length],
-                    flexWrap: flexWrap.data[flexWrap.index % flexWrap.data.length],
-                    justifyContent: justifyContent.data[justifyContent.index % justifyContent.data.length],
-                    alignItems: alignItems.data[alignItems.index % alignItems.data.length],
-                    alignContent: alignContent.data[alignContent.index % alignContent.data.length]
+                    flexDirection: getAttrLooped(flexDirection),
+                    flexWrap: getAttrLooped(flexWrap),
+                    justifyContent: getAttrLooped(justifyContent),
+                    alignItems: getAttrLooped(alignItems),
+                    alignContent: getAttrLooped(alignContent)
                 }}>
                     {this.formItem()}
                 </div>
@@ -88,67 +89,6 @@ class Flex extends Component {
                           onItemClick={this.onItemClick.bind(this)}/>
             </div>
         )
-    }
-
-
-    /**
-     * 数量变化时的处理
-     * @param count
-     */
-    onCountChanged(count) {
-        let ctrl = this.state.ctrl;
-        ctrl[0].data = count;
-        this.setState({
-            ctrl
-        })
-    }
-
-    /**
-     * flex盒子宽变化时处理
-     * @param num
-     */
-    onBoxWidthChanged(num) {
-        let ctrl = this.state.ctrl;
-        ctrl[1].data = num;
-        this.setState({
-            ctrl
-        });
-    }
-
-    /**
-     * flex盒子高变化时处理
-     * @param num
-     */
-    onBoxHeightChanged(num) {
-        let ctrl = this.state.ctrl;
-        ctrl[2].data = num;
-        this.setState({
-            ctrl
-        });
-    }
-
-    /**
-     * item宽变化时处理
-     * @param num
-     */
-    onItemWidthChanged(num) {
-        let ctrl = this.state.ctrl;
-        ctrl[3].data = num;
-        this.setState({
-            ctrl
-        });
-    }
-
-    /**
-     * item高变化时处理
-     * @param num
-     */
-    onItemHeightChanged(num) {
-        let ctrl = this.state.ctrl;
-        ctrl[4].data = num;
-        this.setState({
-            ctrl
-        });
     }
 
     /**
@@ -176,7 +116,7 @@ class Flex extends Component {
             default:
                 break;
         }
-        this.notifyChanged();
+        this.notifyAttrChanged();
     }
 
 
@@ -184,7 +124,6 @@ class Flex extends Component {
         let color = [];
         for (let i = 0; i < this.state.ctrl[0].data; i++) {
             color.push(Logic.randomRGB(.8))
-
         }
         return (
             color.map((item, index) => {
@@ -193,7 +132,6 @@ class Flex extends Component {
                         backgroundColor: item,
                         width: this.state.ctrl[3].data + "px",
                         height: this.state.ctrl[4].data + "px"
-
                     }} key={index}>
                         Toly{index}
                     </div>
@@ -203,20 +141,34 @@ class Flex extends Component {
     }
 
     componentDidMount() {
-        this.notifyChanged();
+        this.notifyAttrChanged();
     }
 
-
-    notifyChanged() {
+    /**
+     * 底部监听--属性变化
+     */
+    notifyAttrChanged() {
         this.setState({
             flexObj: {
-                "flex-direction": flexDirection.data[flexDirection.index],//元素排列方向
-                "flex-wrap": flexWrap.data[flexWrap.index],//换行
-                // "flex-flow": $Flex.css("flex-flow"),//换行+元素排列方向
-                "justify-content": justifyContent.data[justifyContent.index],//水平对齐方式
-                "align-items": alignItems.data[alignItems.index],//垂直对齐方式
-                "align-content": alignContent.data[alignContent.index],//多行垂直对齐方式,
+                "flex-direction": getAttr(flexDirection),//元素排列方向
+                "flex-wrap": getAttr(flexWrap),//换行
+                "justify-content": getAttr(justifyContent),//水平对齐方式
+                "align-items": getAttr(alignItems),//垂直对齐方式
+                "align-content": getAttr(alignContent),//多行垂直对齐方式,
             }
+        });
+    }
+
+    /**
+     * 输入监听--数据变化
+     * @param index
+     * @param input
+     */
+    notifyInputChanged(index, input) {
+        let ctrl = this.state.ctrl;
+        ctrl[index].data = input;
+        this.setState({
+            ctrl
         });
     }
 }

@@ -5,7 +5,10 @@ class C extends Component {
     render() {
         return (
             <div>
-                <h1>今天天气好晴朗</h1>
+
+                <input type="text" {...this.props}/><br/>
+
+                <h1>今天天气好晴朗{this.props.defaultValue}</h1>
                 <h1>{this.props.title}</h1>
                 <img width="250" src={require('../imgs/bg2.jpg')}/>
             </div>

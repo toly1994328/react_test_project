@@ -3,14 +3,19 @@ import CommonBox from "./CommonBox";
 
 class B extends Component {
     constructor(props) {
-        super();
+        super(props);
+        this.state = {
+            value: ""
+        }
 
     }
 
     render() {
         return (
             <div>
-                标题：{this.props.title}<br/>
+                <input type="text" {...this.props}/><br/>
+
+                标题：{this.props.defaultValue}<br/>
                 姓名：{this.props.name}<br/>
                 性别：{this.props.sex}<br/>
 
@@ -18,8 +23,9 @@ class B extends Component {
             </div>
         )
     }
+
     componentDidMount() {
-        console.log(this.props.title);
+        // console.log(this.props.title);
     }
 }
 

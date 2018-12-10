@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import './App.scss';
-import Flex from "./flex/Flex";
+import ToolBar from "./toolbar/ToolBar";
+import './router'
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-                {/*<B/>*/}
-                <Flex/>
+                {/*<TestHOC/>*/}
+                <ToolBar/>
             </div>
         );
     }
